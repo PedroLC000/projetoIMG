@@ -1,5 +1,10 @@
 import numpy as np
 import cv2 as cv
+import os
+
+for f in os.scandir('videos'):
+    os.remove(f)
+
 cap = cv.VideoCapture(0)
 
 # Defina o codec e crie o objeto VideoWriter
