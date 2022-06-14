@@ -1,4 +1,3 @@
-#Blibiotecas
 import cv2
 import math
 import os

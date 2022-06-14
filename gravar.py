@@ -2,12 +2,13 @@ import numpy as np
 import cv2 as cv
 import os
 
-for f in os.scandir('videos'):
-    os.remove(f)
+# caso necessário que seja removido todos os outros vídeos do diretório
+# for f in os.scandir('videos'):
+#     os.remove(f)
 
 cap = cv.VideoCapture(0)
 
-# Defina o codec e crie o objeto VideoWriter
+# Define o codec e crie o objeto VideoWriter
 fourcc = cv.VideoWriter_fourcc(*'XVID')
 out = cv.VideoWriter('videos/gravacao.avi', fourcc, 20.0, (640,  480))
 

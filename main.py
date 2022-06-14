@@ -4,15 +4,23 @@ import mahotas as mt
 import os
 import pandas as pd
 import shutil
+import re
+
+def sorted_alphanumeric(data):
+    convert = lambda text: int(text) if text.isdigit() else text.lower()
+    alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ] 
+    return sorted(data, key=alphanum_key)
 
 for f in os.scandir('saves\crop'):
     os.remove(f)
 
-for cont, filename in enumerate(os.scandir('frames')):
+for cont, filename in enumerate(sorted_alphanumeric(os.listdir('frames'))):
 
-    if filename.is_file():
+    fullpath = os.path.join(".\\frames", filename)
 
-        image = cv2.imread(filename.path)
+    if os.path.isfile(fullpath):
+
+        image = cv2.imread(fullpath)
         img_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     
         # método de segmentação de imagem Canny
@@ -21,13 +29,7 @@ for cont, filename in enumerate(os.scandir('frames')):
 
         # detecta contornos na imagem binarizada usando cv2.CHAIN_APPROX_NONE
         contours, hierarchy = cv2.findContours(image=wide, mode=cv2.RETR_TREE, method=cv2.CHAIN_APPROX_NONE)
-
         image_copy = image.copy()
-
-        # directory = "crop"+str(cont)
-        # parent_dir = "saves\crop"
-        # path = os.path.join(parent_dir, directory)
-        # os.mkdir(path)
 
         # utilizado para extrair cada imagem encontrada com o algoritmo de fremman
         for count, contour_line in enumerate(contours):

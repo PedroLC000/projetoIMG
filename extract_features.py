@@ -5,8 +5,14 @@ import os
 import pandas as pd
 from csv import DictWriter
 import csv
+import re
 
 extractAll = []
+
+def sorted_alphanumeric(data):
+    convert = lambda text: int(text) if text.isdigit() else text.lower()
+    alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ] 
+    return sorted(data, key=alphanum_key)
 
 def replace(var_to_string):
     convertString = str(var_to_string)
@@ -32,12 +38,13 @@ def extractChain(image):
         a.append(contours_str)
     return a
 
-for filename in os.scandir('saves\crop'):
+for filename in sorted_alphanumeric(os.listdir('saves\crop')):
+    fullpath = os.path.join(".\\saves\\crop", filename)
     extract = {}
-    if filename.is_file():
-        image_gray_crop = cv2.imread(filename.path, 0)
-        image_RGB_crop = cv2.imread(filename.path)
-        extract['name'] = filename.name
+    if os.path.isfile(fullpath):
+        image_gray_crop = cv2.imread(fullpath, 0)
+        image_RGB_crop = cv2.imread(fullpath)
+        extract['name'] = filename
         extract['ht_mean'] = extractHaralick(image_gray_crop)
         extract['hist_g'] = extractHistG(image_RGB_crop)
         extract['chain'] = extractChain(image_gray_crop)
@@ -49,13 +56,5 @@ with open('csv\output.csv', 'w', newline='') as csvfile:
     writer.writeheader()
     writer.writerows(extractAll)
 
-# for dict in extractAll:
-#     with open('csv\extracoes.csv', 'a', newline='', encoding='utf8') as f_object:
 
-#         dictwriter_object = DictWriter(
-#             f_object, fieldnames=['name', 'ht_mean', 'hist_g', 'chain'], delimiter=';')
-
-#         dictwriter_object.writerow(dict)
-
-#         f_object.close()
 
