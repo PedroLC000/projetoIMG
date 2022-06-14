@@ -40,6 +40,6 @@ for cont, filename in enumerate(os.scandir('frames')):
                 x1, x2, y1, y2 = min(x), max(x), min(y), max(y)
                 cropped = image[y1:y2, x1:x2]
 
-                cv2.imwrite(f'saves/crop/crop{cont}-{count}.png', cropped)
+                cv2.imwrite(f'saves/crop/Frame{cont}-crop{count}.png', cropped)
                 x.clear()
                 y.clear()

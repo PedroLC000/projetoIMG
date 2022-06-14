@@ -8,26 +8,28 @@ import csv
 
 extractAll = []
 
+def replace(var_to_string):
+    convertString = str(var_to_string)
+    replacedString = convertString.replace("\n", "")
+    return replacedString
+
 def extractHaralick(image_gray_crop):
     textures = mt.features.haralick(image_gray_crop)
-    textures_str = str(textures.mean(axis=0))
-    x = textures_str.replace("\n", "")
-    return x
+    textures_str = replace(textures.mean(axis=0))
+    return textures_str
 
 def extractHistG(image):
     (b, g, r) = cv2.split(image)
-    g_str = str(cv2.calcHist([g], [0], None, [256], [0, 255]))
-    y = g_str.replace("\n", "")
-    return y
+    g_str = replace(cv2.calcHist([g], [0], None, [256], [0, 255]))
+    return g_str
 
 def extractChain(image):
     ret, thresh = cv2.threshold(image, 127, 255, 0)
     contours, hierarchy = cv2.findContours(image=thresh, mode=cv2.RETR_TREE, method=cv2.CHAIN_APPROX_NONE)
     a = []
     for i in contours:
-        contours_str = str(i)
-        z = contours_str.replace("\n", "")
-        a.append(z)
+        contours_str = replace(i)
+        a.append(contours_str)
     return a
 
 for filename in os.scandir('saves\crop'):
